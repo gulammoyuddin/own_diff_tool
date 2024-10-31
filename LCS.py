@@ -50,12 +50,17 @@ def lcs(s1, s2):
                     count_graph[x][y]= count_graph[x][y-1]
                     dir_graph[x][y]=0
     result = ''
+    if type(s1) == type([]):
+        result = []
     x=n1
     y=n2
     while dir_graph[x][y]!=-1:
         # print(x,y)
         if dir_graph[x][y]==2:
-            result=s1[x-1]+result
+            if type(s1) == type([]):
+                result = [s1[x-1]]+result
+            else:
+                result = s1[x-1] + result
             x=x-1
             y=y-1
         else:
@@ -65,3 +70,52 @@ def lcs(s1, s2):
                 if dir_graph[x][y]==0:
                     y=y-1
     return result
+
+# x= lcs, y= txt1, z=txt2
+def get_diff(txt1,txt2):
+    diff = []
+    l = lcs(txt1,txt2)
+    print(type(l))
+    x=0
+    y=0
+    z=0
+    while x<len(l) and y<len(txt1) and z<len(txt2):
+        if l[x] == txt1[y] and l[x] == txt2[z]:
+            pass
+        else:
+            if l[x] == txt1[y]:
+                while z<len(txt2) and l[x] != txt2[z]:
+                    diff.append('> ' + txt2[z])
+                    z=z+1
+            else:
+                if l[x] == txt2[z]:
+                    while y<len(txt1) and l[x] != txt1[y]:
+                        diff.append('< ' + txt1[y])
+                        y=y+1
+                else:
+                    while z<len(txt2) and l[x] != txt2[z] and y<len(txt1) and l[x] != txt1[y]:
+                        diff.append('> ' + txt2[z])
+                        z=z+1
+                        diff.append('< ' + txt1[y])
+                        y=y+1
+                    while z<len(txt2) and l[x] != txt2[z]:
+                        diff.append('> ' + txt2[z])
+                        z=z+1
+                    while y<len(txt1) and l[x] != txt1[y]:
+                        diff.append('< ' + txt1[y])
+                        y=y+1
+        x=x+1
+        y=y+1
+        z=z+1
+    while z<len(txt2) and y<len(txt1):
+        diff.append('> ' + txt2[z])
+        z=z+1
+        diff.append('< ' + txt1[y])
+        y=y+1
+    while z<len(txt2):
+        diff.append('> ' + txt2[z])
+        z=z+1
+    while y<len(txt1):
+        diff.append('< ' + txt1[y])
+        y=y+1
+    return diff
