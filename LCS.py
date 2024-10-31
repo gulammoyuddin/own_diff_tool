@@ -75,7 +75,7 @@ def lcs(s1, s2):
 def get_diff(txt1,txt2):
     diff = []
     l = lcs(txt1,txt2)
-    print(type(l))
+    # print(type(l))
     x=0
     y=0
     z=0
